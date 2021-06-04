@@ -24,6 +24,10 @@ import { UnlessDirective } from './directive/unless.directive';
     LoginComponent,
     UnlessDirective,
   ],
+  entryComponents: [
+    RegisterComponent,
+    LoginComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
