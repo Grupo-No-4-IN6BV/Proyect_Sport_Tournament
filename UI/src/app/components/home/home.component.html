@@ -1,11 +1,28 @@
-<div class="container">
-  <div class="card border-0 shadow my-5">
-    <div class="card-body p-5">
-      <h1 class="font-weight-light">Fixed Full Page Background Image</h1>
-      <p class="lead">In this snippet, the background image is fixed to the body element. Content on the page will scroll, but the image will remain in a fixed position!</p>
-      <p class="lead">Scroll down...</p>
-      <div style="height: 700px"></div>
-      <p class="lead mb-0">You've reached the end!</p>
+
+
+<section id="hero" class="hero d-flex align-items-center">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 d-flex flex-column justify-content-center">
+          <h1 data-aos="fade-up">We offer modern solutions for growing your business</h1>
+          <h2 data-aos="fade-up" data-aos-delay="400">We are team of talented designers making websites with Bootstrap</h2>
+          <div data-aos="fade-up" data-aos-delay="600">
+            <div class="text-center text-lg-start">
+              <a href="#about" class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
+                <span (click)="condition = !condition"[ngClass] = "{ 'a': condition, 'b': !condition }">Get Started</span>
+  
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8" *appUnless="condition">
+          <app-login></app-login>
+        </div>
+        <div class="col-lg-8" *appUnless="!condition">
+            <app-register></app-register>
+          </div>
+      </div>
     </div>
-  </div>
-</div>
+    
+  </section>

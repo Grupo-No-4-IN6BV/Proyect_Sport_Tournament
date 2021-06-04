@@ -9,13 +9,20 @@ import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { UnlessDirective } from './directive/unless.directive';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     NavbarComponent,
-    SideNavComponent
+    SideNavComponent,
+    RegisterComponent,
+    LoginComponent,
+    UnlessDirective,
   ],
   imports: [
     BrowserModule,
