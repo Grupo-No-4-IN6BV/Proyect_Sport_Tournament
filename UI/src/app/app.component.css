@@ -11,5 +11,9 @@ body {
     line-height: 1.5;
     color: #525f7f;
     text-align: left;
-    background: #1e1e2f;
+    background-color: #1e1e2f;
+}
+
+.mat-sidenav-container, .mat-sidenav{
+    background-color: transparent;
 }
