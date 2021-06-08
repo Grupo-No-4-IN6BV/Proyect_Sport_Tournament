@@ -4,7 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var userRoutes = require('./routes/user.routes');
-var torneoRoutes = require('./routes/torneo.router');
+var torneoRoutes = require('./routes/torneo.routes');
 
 var app = express();
 

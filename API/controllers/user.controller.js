@@ -2,6 +2,7 @@
 
 var User = require('../models/user.model');
 var bcrypt = require('bcrypt-nodejs');
+var jwt = require('../services/jwt');
 
 var fs = require('fs');
 var path = require('path');
@@ -94,7 +95,7 @@ function register(req, res){
                         user.name = params.name;
                         user.username = params.username;
                         user.email = params.email;
-                        user.role = 'ROL_USER';
+                        user.role = 'ROLE_USER';
                         user.save((err, userSaved) => {
                             if(err){
                                 return res.status(404).send({message: "ocurrio un error al intentar guardar el usuario"})
@@ -115,8 +116,24 @@ function register(req, res){
     }
 }
 
+function getUsers(req, res){
+    User.find({}).exec((err, userFinds) => {
+        if(err){
+            return res.status(500).send({message: "Error al buscar los usuarios"})
+        }else if(userFinds){
+            return res.send({message: "Usuarios encontrados", userFinds})
+        }else{
+            return res.status(204).send({message: "No se encontraron usuarios"})
+        }
+    })
+}
+
+
 
 
 module.exports = {
-    initAdmin
+    initAdmin,
+    register,
+    login,
+    getUsers
 }

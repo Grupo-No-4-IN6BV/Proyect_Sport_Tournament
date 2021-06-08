@@ -11,7 +11,8 @@ import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
-import { UnlessDirective } from './directive/unless.directive';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -22,7 +23,6 @@ import { UnlessDirective } from './directive/unless.directive';
     SideNavComponent,
     RegisterComponent,
     LoginComponent,
-    UnlessDirective,
   ],
   entryComponents: [
     RegisterComponent,
@@ -33,7 +33,9 @@ import { UnlessDirective } from './directive/unless.directive';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSliderModule,
-    MatSidenavModule
+    MatSidenavModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],
