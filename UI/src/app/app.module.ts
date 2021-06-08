@@ -13,6 +13,11 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AdministrationComponent } from './components/administration/administration.component';
+import { TournamentComponent } from './components/tournament/tournament.component';
+import { ListUsersComponent } from './components/list-users/list-users.component';
+import { LeagueComponent } from './components/league/league.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
 
 
 @NgModule({
@@ -23,6 +28,11 @@ import { HttpClientModule } from '@angular/common/http';
     SideNavComponent,
     RegisterComponent,
     LoginComponent,
+    AdministrationComponent,
+    TournamentComponent,
+    ListUsersComponent,
+    LeagueComponent,
+    StatisticsComponent,
   ],
   entryComponents: [
     RegisterComponent,
