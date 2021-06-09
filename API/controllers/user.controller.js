@@ -185,47 +185,6 @@ function updateUser(req, res){
 }
 
 function saveUser(req, res){
-    var user = new User();
-    var params = req.body;
-
-    if(params.name && params.username && params.email && params.password){
-        User.findOne({username: params.username}, (err, userFind)=>{
-            if(err){
-                return res.status(500).send({message: 'Error general'});
-            }else if(userFind){
-                return res.send({message: 'Nombre de usuario no disponible.'});
-            }else{
-                bcrypt.hash(params.password, null, null, (err, passwordHash)=>{
-                    if(err){
-                        return res.status(500).send({message: 'Error general al comparar contraseña'});
-                    }else if(passwordHash){
-                        user.password = passwordHash;
-                        user.name = params.name;
-                        user.lastname = params.lastname;
-                        user.username = params.username.toLowerCase();
-                        user.email = params.email.toLowerCase();
-                        user.phone = params.phone;
-
-                        user.save((err, userSaved)=>{
-                            if(err){
-                                return res.status(500).send({message: 'Error general al guardar usuario'});
-                            }else if(userSaved){
-                                return res.send({message: 'Usuario creado exitosamente', userSaved});
-                            }else{
-                                return res.status(500).send({message: 'No se guardó el usuario'});
-                            }
-                        })
-                    }else{
-                        return res.status(403).send({message: 'La contraseña no se ha encriptado'});
-                    }
-                })
-            }
-        })
-    }else{
-        return res.status(401).send({message: 'Por favor envía los datos mínimos para la creación de tu cuenta'})
-    }
-}
-
 function removeUser(req, res){
     let userId = req.params.id;
     let params = req.body;
@@ -298,4 +257,5 @@ module.exports = {
     getUsers,
     updateUser,
     removeUser
+
 }
