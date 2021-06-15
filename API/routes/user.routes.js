@@ -8,7 +8,10 @@ var userController = require('../controllers/user.controller');
 api.get('/getUsers', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.getUsers)
 api.post('/register', userController.register)
 api.post('/login', userController.login)
-api.put('/updateUser/:id', md_autorizacion.ensureAuth, usuarioControlador.updateUser);
-api.put('/removeUser/:id',md_autorizacion.ensureAuth, usuarioControlador.removeUser);
+
+api.put('/updateUser/:id',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.updateUser);
+api.put('/removeUser/:id',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.removeUser);
+api.get('/getUser/:id', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.getUser);
+api.post('/newInitADmin',[mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], userController.newInitADmin);
 
 module.exports = api;
