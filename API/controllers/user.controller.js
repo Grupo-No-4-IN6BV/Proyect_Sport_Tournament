@@ -132,123 +132,159 @@ function updateUser(req, res){
     let userId = req.params.id;
     let update = req.body;
 
-    if(userId != req.user.sub){
-        return res.status(401).send({ message: 'No tienes permiso para realizar esta acción'});
-    }else{
         if(update.password || update.role){
             return res.status(401).send({ message: 'No se puede actualizar la contraseña ni el rol desde esta función'});
         }else{
             if(update.username){
                 User.findOne({username: update.username.toLowerCase()}, (err, userFind)=>{
                     if(err){
-                        return res.status(500).send({ message: 'Error general en la busqueda de usuario'});
-                    }else if(userFind){
-                        if(userFind._id == req.user.sub){
-                            User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
-                                if(err){
-                                    return res.status(500).send({message: 'Error general al actualizar'});
-                                }else if(userUpdated){
-                                    return res.send({message: 'Usuario actualizado', userUpdated});
-                                }else{
-                                    return res.send({message: 'No se pudo actualizar al usuario'});
-                                }
-                            })
-                        }else{
-                            return res.send({message: 'Nombre de usuario ya en uso'});
-                        }
-                    }else{
+                    return res.status(500).send({ message: 'Error general'});
+                }else if(userFind){
+                    if(userFind._id == req.user.sub){
                         User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
                             if(err){
                                 return res.status(500).send({message: 'Error general al actualizar'});
                             }else if(userUpdated){
-                                return res.send({message: 'Usuario actualizado', userUpdated});
+                                if (userUpdated.role != "ROLE_ADMIN"){
+                                    return res.send({message: 'Usuario actualizado', userUpdated});
+                                }else{
+                                    return res.send({message: 'No posee el permiso de editar usuario admin' });
+                                }
                             }else{
                                 return res.send({message: 'No se pudo actualizar al usuario'});
                             }
                         })
-                    }
-                })
-            }else{
-                User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
-                    if(err){
-                        return res.status(500).send({message: 'Error general al actualizar'});
-                    }else if(userUpdated){
-                        return res.send({message: 'Usuario actualizado', userUpdated});
                     }else{
-                        return res.send({message: 'No se pudo actualizar al usuario'});
+                        return res.send({message: 'Nombre de usuario ya en uso'});
                     }
-                })
-            }
-        }
-    }
-    
-}
-
-function saveUser(req, res){
-function removeUser(req, res){
-    let userId = req.params.id;
-    let params = req.body;
-
-    if(userId != res.user.sub){
-        return res.status(500).send({message: 'No tiene permis de realizar la accion'})
-    }else{
-        if(!params.password){
-            return res. status(401).send({message: 'Porfavor ingresa la contrase;a para poder elimnar la cuenta'})
-        }
-
-        User.findById(userId, (err,userFind )=>{
-            if(err){
-
-            }else if(userFind){
-                bcrypt.compare(params.password, userFind.password, (err, checkPassword)=>{
-
-                })
-
-            }else{
-                
-            }
-        })
-    }
-}
-
-function removeUser(req, res){
-    let userId = req.params.id;
-    let params = req.body;
-
-    if(userId != req.user.sub){
-        return res.status(403).send({message: ' No tienes permiso para realizar esta acción'})
-    }else{
-        if(!params.password){
-            return res.status(401).send({message: 'Ingresar contraseña para poder eliminar tu cuenta'});
-        }else{
-            User.findById(userId, (err, userFind)=>{
-                if(err){
-                    return res.status(500).send({message: 'Error general al buscar usuario'})
-                }else if(userFind){
-                    bcrypt.compare(params.password, userFind.password, (err, checkPassword)=>{
+                }else{
+                    User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
                         if(err){
-                            return res.status(500).send({message: 'Error general al verificar contraseña'})
-                        }else if(checkPassword){
-                            User.findByIdAndRemove(userId, (err, userFind)=>{
-                                if(err){
-                                    return res.status(500).send({message: 'Error general al verificar contraseña'})
-                                }else if(userFind){
-                                    return res.send({message: 'Usuario eliminado', userRemoved:userFind})
-                                }else{
-                                    return res.status(404).send({message: 'Usuario no encontrado o ya eliminado'})
-                                }
-                            })
+                            return res.status(500).send({message: 'Error general al actualizar'});
+                        }else if(userUpdated){
+                            if (userUpdated.role != "ROLE_ADMIN"){
+                                return res.send({message: 'Usuario actualizado', userUpdated});
+                            }else{
+                                return res.send({message: 'No posee el permiso de editar usuario admin' });
+                            }
                         }else{
-                            return res.status(403).send({message: 'Contraseña incorrecta, solo con tu contraseña podrás eliminar tu cuenta'})
+                            return res.send({message: 'No se pudo actualizar al usuario'});
                         }
                     })
+                }
+            })
+        }else{
+            User.findByIdAndUpdate(userId, update, {new: true}, (err, userUpdated)=>{
+                if(err){
+                    return res.status(500).send({message: 'Error general al actualizar'});
+                }else if(userUpdated){
+                    if (userUpdated.role != "ROLE_ADMIN"){
+                        return res.send({message: 'Usuario actualizado', userUpdated});
+                    }else{
+                        return res.send({message: 'No posee el permiso de editar usuario admin' });
+                    }
                 }else{
-                    return res.status(404).send({message: 'No existe la cuenta, o ya eliminado'})
+                    return res.send({message: 'No se pudo actualizar al usuario'});
                 }
             })
         }
     }
 }
+
+function removeUser(req, res){
+    let userId = req.params.id;
+    let params = req.body;
+
+    User.findById(userId, (err, userFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error general'})
+        }else if(userFind){
+            if (userFind.role != "ROLE_ADMIN"){
+                User.findByIdAndRemove(userId, (err, userFind)=>{
+                    if(err){
+                        return res.status(500).send({message: 'Error general al verificar contraseña'})
+                    }else if(userFind){
+                        return res.send({message: 'Usuario eliminado', userRemoved:userFind})
+                    }else{
+                        return res.status(404).send({message: 'Usuario no encontrado o ya eliminado'})
+                    }
+                })
+            }else{
+                return res.status(404).send({message: 'No posee el perrmiso par eliminar usuario Admin'})
+
+            }
+            
+        }else{
+            return res.status(404).send({message: 'Usuario inexistente o ya eliminado'})
+        }
+    })
+}
+
+function getUser(req, res) {
+    let userId = req.params.id;
+    var role =req.user.role;
+
+    User.findById(userId).exec((err, userFind)=>{
+        if(err){
+            return res.status(500).send({message: 'Error eql busacar usuario'});
+        }else if(userFind){
+            if (userFind.role != "ROLE_ADMIN"){
+                User.findById(userId).exec((err, user)=>{ //buscar solo por id
+                    if(err){
+                        res.status(500).send({message: 'Error en el servidor'});
+                    }else if(user){
+                        res.status(200).send({message: 'Usuario encontrado', user})
+                    }else{
+                        res.status(200).send({message: 'No hay registros'})
+                    }
+                })
+            }else{
+                return res.send({message: 'No possee el permiso para ver usario Admin'})
+            }
+        }else{
+            return  res.status(204).send({message: 'No hay registros'})
+        }
+    }) 
+}
+
+function newInitADmin(req, res) {
+    var user = new User();
+    var params = req.body;
+
+    if(params.username && params.password){
+        User.findOne({username: params.username}, (err, adminFind)=>{
+            if(err){
+                return res.status(500).send({message: 'Error general en el servidor'});
+            }else if(adminFind){
+                return res.send({message: 'Nombre de usuario admin ya en uso'});
+            }else{
+                bcrypt.hash(params.password, null, null, (err, passwordHash) => {
+                    if(err){
+                        return res.status(404).send({message: "La encriptación de la contraseña falló", err})
+                    }else if(passwordHash){
+                        user.password = passwordHash;
+                        user.username = params.username;
+                        user.role = 'ROLE_ADMIN';
+                        user.save((err, adminSaved) => {
+                            if(err){
+                                return res.status(404).send({message: "ocurrio un error al intentar guardar el usuario"})
+                            }else if(adminSaved){
+                                return res.send({message: "Usuario creado satisfactoriamente",adminSaved})
+                            }else{
+                                return res.status(403).send({message: "Error al intentar guardar Datos"})
+                            }
+                        })
+                    }else{
+                        return res.status(401).send({message: "la contraseña no encriptada"})
+                    }
+                })
+            }
+        })
+    }else{
+        return res.send({message: 'Por favor ingresa los datos obligatorios: Username y Password'});
+    }
+}
+
 
 module.exports = {
     initAdmin,
@@ -256,6 +292,8 @@ module.exports = {
     login,
     getUsers,
     updateUser,
-    removeUser
+    removeUser,
+    getUser,
+    newInitADmin
 
 }
